@@ -18,7 +18,7 @@ print()
 
 #print values 6-10 in the list
 print ("The sixth through tenth values in list are: ")
-print(space_stuff[6:])
+print(space_stuff[5:])
 print()
 
 #changing the value of seventh item 
