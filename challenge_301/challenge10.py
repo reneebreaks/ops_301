@@ -11,7 +11,6 @@ import os
 with open("my_document.txt", "w") as document:
   pass
 
-#my_document = "my_document.txt"
 
 #add three lines to the document
 with open("my_document", "w") as document:
@@ -30,6 +29,5 @@ with open("my_document", "r") as document:
     print("The First Line:", firstline)
 
 #now we will delete our precious transcript
-
 os.remove("/home/reneebreaks/ops_301/challenge_301/my_document.txt")
 os.remove("/home/reneebreaks/ops_301/challenge_301/my_document")
